@@ -2,12 +2,20 @@
 
 This document outlines the current user and data flow of the Scheduler application.
 
-## 1. Authentication
+## 1. Database (PostgreSQL via Neon)
+
+The application is configured to use a serverless PostgreSQL database hosted on [Neon](https://neon.tech/).
+
+- **Schema (`prisma/schema.prisma`):** This file defines the database schema using Prisma. The provider is set to `postgresql`, and it includes the standard data models required by NextAuth.js (`User`, `Account`, `Session`, `VerificationToken`).
+- **Client (`src/lib/prisma.ts`):** This file initializes the Prisma Client. It uses the `@prisma/adapter-neon` to create a connection to the serverless database using the `DATABASE_URL` environment variable. This setup is optimized for serverless environments.
+
+# 2. Authentication
+
 
 The application uses NextAuth.js for authentication, configured to use **Google as the primary OAuth provider**.
 
 - **Configuration (`src/lib/auth.ts`):** Defines the NextAuth.js options, including the Google provider and a `PrismaAdapter`. This adapter connects NextAuth.js to the database, allowing it to store user and session information.
-- **API Endpoints (`src/app/api/auth/[...nextauth]/route.ts`):** This file creates the API route that handles all authentication requests (e.g., `/api/auth/signin`, `/api/auth/signout`, `/api/auth/session`).
+- **API Endpoints (`src/app/api/auth/[...nextauth]/route.ts`):** This file creates the API route that handles all authentication requests (e.g., `/api/auth/signin`, `/api/auth/signout`, `/api/auth/session`). The runtime for this route is explicitly set to `"nodejs"` to ensure the Prisma adapter and database connection function correctly.
 
 ## 2. Application Entrypoint & Structure
 
