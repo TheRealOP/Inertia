@@ -49,3 +49,36 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Calendar {
+  id                 String          @id @default(cuid())
+  userId             String
+  provider           String
+  providerCalendarId String
+  summary            String?
+  timeZone           String?
+  accessRole         String?
+  user               User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  events             CalendarEvent[]
+
+  @@unique([userId, provider, providerCalendarId])
+}
+
+model CalendarEvent {
+  id               String    @id @default(cuid())
+  calendarId       String
+  providerEventId  String
+  status           String?
+  summary          String?
+  description      String?
+  location         String?
+  startTime        DateTime?
+  endTime          DateTime?
+  startDate        DateTime?
+  endDate          DateTime?
+  allDay           Boolean   @default(false)
+  providerUpdatedAt DateTime?
+  calendar         Calendar  @relation(fields: [calendarId], references: [id], onDelete: Cascade)
+
+  @@unique([calendarId, providerEventId])
+}
