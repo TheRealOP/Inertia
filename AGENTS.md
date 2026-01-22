@@ -77,6 +77,7 @@
 *   `src/lib/` - Singleton utilities (Prisma, Auth, API wrappers).
 *   `src/server/` - (If applicable) Server Actions or Backend logic.
 *   `prisma/` - Database schema and migrations.
+*   `Documentation for Ojas/` - Main project documentation.
 
 ## 5. Tool Usage Protocols
 
